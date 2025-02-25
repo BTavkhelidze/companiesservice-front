@@ -22,17 +22,21 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { passwordMatchSchema } from '@/validation/passwordMatchSchema';
+import { useRouter } from 'next/navigation';
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(20),
-  passwordConfirm: z.string(),
-  companyName: z.string(),
-  country: z.string(),
-  industry: z.string(),
-});
+const formSchema = z
+  .object({
+    email: z.string().email(),
+    companyName: z.string(),
+    country: z.string(),
+    industry: z.string(),
+  })
+  .and(passwordMatchSchema);
 
 export default function SignUpPage() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,8 +49,34 @@ export default function SignUpPage() {
     },
   });
 
-  const handleSubmit = (formData: any) => {
-    console.log(formData);
+  const handleSubmit = async (formData: any) => {
+    const newCompany = {
+      name: formData.companyName,
+      password: formData.password,
+      email: formData.email,
+      industry: formData.industry,
+      country: formData.country,
+    };
+    console.log(newCompany, 'sfsaw');
+
+    try {
+      const response = await fetch('api/sign-up', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newCompany),
+      });
+      console.log(response, 'successs');
+
+      if (!response.ok) throw new Error('Registration failed');
+      if (response.status === 201) {
+        form.reset();
+        router.push('/sign-in');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -161,7 +191,19 @@ export default function SignUpPage() {
               </form>
             </FormProvider>
           </CardContent>
-          <CardFooter>{/* <p>Card Footer</p> */}</CardFooter>
+          <CardFooter className='w-full text-center flex items-center justify-center'>
+            <p>
+              {' '}
+              try{' '}
+              <span
+                className='cursor-pointer text-blue-400 underline font-semibold'
+                onClick={() => router.push('/sign-in')}
+              >
+                {' '}
+                Sign In{' '}
+              </span>
+            </p>
+          </CardFooter>
         </Card>
       </main>
     </>
