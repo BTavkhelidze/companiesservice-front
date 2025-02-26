@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 export default function PaymentSuccess({
   searchParams: { amount },
@@ -9,12 +8,6 @@ export default function PaymentSuccess({
   searchParams: { amount: string };
 }) {
   const router = useRouter();
-
-  //   useEffect(() => {
-  //     setTimeout(() => {
-  //       router.push('/home');
-  //     }, 3000);
-  //   }, []);
 
   return (
     <main className='max-w-6xl mx-auto p-10 text-white text-center border m-10 rounded-md bg-gradient-to-tr from-blue-500 to-purple-500'>

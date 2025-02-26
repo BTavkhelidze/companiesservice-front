@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getCookie, setCookie } from 'cookies-next';
+
 import { FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -56,7 +56,7 @@ export default function SignInPage() {
         : { email: '', password: '', passwordConfirm: '' };
     },
   });
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (formData: any) => {
     setErrorMessage(undefined);
 
@@ -80,6 +80,7 @@ export default function SignInPage() {
         form.reset();
         router.push('/home');
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Login error:', error);
 

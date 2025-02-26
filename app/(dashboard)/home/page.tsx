@@ -1,20 +1,17 @@
 'use client';
-import CompanySubscription from '@/components/CompanySubscription';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import convertToSubcurrency from '@/lib/convertToSubcurrency';
-import CheckoutPage from '@/components/CheckoutForm.tsx';
+import React, { useEffect } from 'react';
+
 import Subscriptions from '../subscriptions/page';
+
+import AddNewUser from '@/components/AddNewUser';
+
+import { UseCurrentCompany } from '@/app/zustand/useCompanyActive';
+import { Users } from '@/components/Users';
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
   throw new Error('NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined');
 }
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
 
 export interface ICompany {
   country: string;
@@ -28,61 +25,26 @@ export interface ICompany {
   _id: string;
 }
 function HomePage() {
-  const [company, setCompany] = useState<ICompany | undefined>();
+  const { company, fetchCompany, loading, error } = UseCurrentCompany();
   useEffect(() => {
-    async function getCopmanies() {
-      const { data } = await axios.get('/api/current-company', {
-        withCredentials: true,
-      });
+    fetchCompany();
+  }, [fetchCompany]);
 
-      console.log(data, 'data');
-      setCompany(data.data);
-    }
-    getCopmanies();
-  }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  console.log(company, 'company');
-  // useEffect(() => {
-  //   async function getCompanies() {
-  //     const { data } = await axios.get(`http://localhost:3000/companies`, {
-  //       withCredentials: true,
-  //     });
-
-  //     setCompanies(data);
-  //   }
-  //   getCompanies();
-  // }, []);
-  // console.log(companies, 'companies');
-
-  const amount = 49.99;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   if (!company) return null;
 
   return (
     <div>
       <h1>CompanyName : {company.name}</h1>
-      {/* <main className='max-w-6xl mx-auto p-10 text-white text-center border m-10 rounded-md bg-gradient-to-tr from-blue-500 to-purple-500'>
-        <div className='mb-10'>
-          <h1 className='text-4xl font-extrabold mb-2'>Sonny</h1>
-          <h2 className='text-2xl'>
-            has requested
-            <span className='font-bold'> ${amount}</span>
-          </h2>
-        </div>
-
-        <Elements
-          stripe={stripePromise}
-          options={{
-            mode: 'payment',
-            amount: convertToSubcurrency(amount),
-            currency: 'usd',
-          }}
-        >
-          <CheckoutPage amount={amount} />
-        </Elements>
-      </main> */}
-
-      {/* <CompanySubscription company={company} /> */}
+      <Users />
+      <AddNewUser />
       <Subscriptions company={company} />
     </div>
   );

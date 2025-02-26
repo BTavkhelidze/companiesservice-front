@@ -2,14 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { useRouter } from 'next/navigation';
+
 import { ICompany } from '../home/page';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
-
-const blogImg = '/assets/blog-img.jpg';
 
 interface Plan {
   id: string;
@@ -21,9 +19,12 @@ interface Plan {
   images: string | null;
 }
 
-const Subscription: React.FC<ICompany> = ({ company }) => {
+interface company {
+  company: ICompany;
+}
+
+const Subscription: React.FC<company> = ({ company }) => {
   const [plans, setPlans] = useState([]);
-  const router = useRouter();
 
   useEffect(() => {
     fetch('/api/subscription-plans')
@@ -33,7 +34,7 @@ const Subscription: React.FC<ICompany> = ({ company }) => {
         console.error('Error fetching subscription plans:', error)
       );
   }, []);
-  console.log(plans, 'plans');
+
   const handleSubscribe = async (plan: Plan) => {
     try {
       const stripe = await stripePromise;
@@ -41,18 +42,23 @@ const Subscription: React.FC<ICompany> = ({ company }) => {
         throw new Error('Stripe has not been initialized');
       }
 
-      const { sessionId } = await fetch('/api/create-checkout-Session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId: plan.price_id,
-          planName: plan.name,
-          planPrice: plan.price,
-        }),
-      }).then((res) => res.json());
+      const createCheckoutSession = async () => {
+        const response = await fetch('/api/create-checkout-Session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            priceId: plan.price_id,
+            planName: plan.name,
+            planPrice: plan.price,
+          }),
+        });
+        const data = await response.json();
+        return data.sessionId;
+      };
 
+      const sessionId = await createCheckoutSession();
       const result = await stripe.redirectToCheckout({ sessionId });
 
       if (result.error) {
@@ -61,12 +67,6 @@ const Subscription: React.FC<ICompany> = ({ company }) => {
     } catch (error) {
       console.error('Subscription error:', error);
     }
-  };
-
-  const handleBasicSubscribe = () => {
-    setTimeout(() => {
-      router.push('/posts');
-    }, 5000);
   };
 
   return (
@@ -80,30 +80,6 @@ const Subscription: React.FC<ICompany> = ({ company }) => {
         </p>
       </div>
       <div className='container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto'>
-        {/* <div className='flex flex-col justify-between border border-gray-300 rounded-xl shadow-md p-8 bg-[#955251] hover:shadow-xl transition-shadow duration-300 dark:bg-gray-900'>
-          <div className='flex flex-col items-center'>
-            <h2 className='text-3xl font-semibold text-gray-300 dark:text-gray-100 mb-5'>
-              Basic Plan
-            </h2>
-            <img src={blogImg} alt='blog' className='h-[350px] md:h-[200px]' />
-            <p className='text-gray-300 dark:text-gray-300'>
-              Access limited features such as viewing blogs and more.
-            </p>
-            <p className='text-lg font-medium text-gray-300 dark:text-gray-100 mt-6 mb-3'>
-              Free Plan
-            </p>
-            <p className='text-gray-300 dark:text-gray-300 mb-6'>
-              Explore public content that caught the world&aposs attention.
-            </p>
-          </div>
-          <button
-            onClick={handleBasicSubscribe}
-            className='mt-auto bg-cyan-500 text-white px-6 py-3 rounded-lg w-full font-medium hover:bg-blue-700 transition-colors'
-          >
-            Get Free Resources
-          </button>
-        </div> */}
-
         {plans.map((plan: Plan) => (
           <div
             key={plan.id}

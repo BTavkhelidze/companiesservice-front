@@ -11,7 +11,7 @@ export async function GET(req: Request) {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
-          Cookie: cookieHeader, // Keep this to forward the cookie
+          Cookie: cookieHeader,
         },
       }
     );
@@ -20,6 +20,7 @@ export async function GET(req: Request) {
       data: response.data,
       status: response.status,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Error fetching company data:', error);
     return NextResponse.json(

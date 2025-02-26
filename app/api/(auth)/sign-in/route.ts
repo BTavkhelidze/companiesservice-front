@@ -34,6 +34,7 @@ export async function POST(req: Request) {
     }
 
     return nextResponse;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Error:', error);
     return NextResponse.json(

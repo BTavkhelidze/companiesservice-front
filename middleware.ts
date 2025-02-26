@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sessionStatus } from './utils/session';
 
 export async function middleware(request) {
-  console.log(request, 'middleware');
   const session = await sessionStatus();
   const publicPaths = ['/home', '/contact', '/signIn', '/signUp', '/about'];
   const pathname = request.nextUrl.pathname;
@@ -13,7 +12,8 @@ export async function middleware(request) {
     return NextResponse.redirect(absoluteUrl.toString());
   }
 
-  console.log('No redirect, proceeding');
+  console.log(request, 'middleware');
+  console.log('No rediresct, proceeding');
   return NextResponse.next();
 }
 

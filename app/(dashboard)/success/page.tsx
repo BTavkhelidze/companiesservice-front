@@ -37,14 +37,11 @@ export default function SuccessPage() {
         body: JSON.stringify({ sessionId }),
       });
 
-      console.log('Raw response:', response);
-
       if (!response.ok) {
         throw new Error('Failed to fetch session details.');
       }
 
       const { session } = await response.json();
-      console.log('Parsed session:', session);
 
       if (session.payment_status) {
         setStatus(session.payment_status);
@@ -64,18 +61,17 @@ export default function SuccessPage() {
             plan: payment,
           };
           const update = async () => {
-            const response = await axios.post('/api/company', data, {
+            await axios.post('/api/company', data, {
               withCredentials: true,
               headers: {
                 'Content-Type': 'application/json',
               },
             });
-            console.log(response, 'srs');
           };
           update();
-          //   setTimeout(() => {
-          //     PushRoute();
-          //   }, 5000);
+          setTimeout(() => {
+            PushRoute();
+          }, 5000);
         }
       } else {
         throw new Error('Missing required session details.');

@@ -2,7 +2,7 @@
 'use server';
 
 import { headers } from 'next/headers';
-import { NextResponse } from 'next/server';
+
 import axios from 'axios';
 
 export async function createCheckoutSession(data: FormData) {
@@ -12,9 +12,9 @@ export async function createCheckoutSession(data: FormData) {
   const origin = headers().get('origin') as string;
 
   const priceIds = {
-    free: 'price_free_xxx', // Replace with your Free Price ID
-    basic: 'price_basic_xxx', // Replace with your Basic Price ID
-    premium: 'price_premium_xxx', // Replace with your Premium Price ID
+    free: 'price_1QvwXRLBnqqETekESqovHYqo',
+    basic: 'price_1QvwQMLBnqqETekEKGFacdWz',
+    premium: 'price_1QvwyILBnqqETekEahMiRoul',
   };
 
   const priceId = priceIds[plan];
