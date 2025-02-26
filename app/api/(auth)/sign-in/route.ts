@@ -17,7 +17,6 @@ export async function POST(req: Request) {
     );
 
     const setCookieHeader = response.headers['set-cookie'];
-    console.log(response);
 
     const nextResponse = NextResponse.json(
       { status: 200, message: 'success' },
@@ -33,7 +32,7 @@ export async function POST(req: Request) {
         nextResponse.headers.append('Set-Cookie', cookie);
       });
     }
-    console.log(nextResponse, 'nextResponse');
+
     return nextResponse;
   } catch (error: any) {
     console.error('Error:', error);

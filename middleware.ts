@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { sessionStatus } from './app/utils/session';
+import { sessionStatus } from './utils/session';
 
 export async function middleware(request) {
+  console.log(request, 'middleware');
   const session = await sessionStatus();
   const publicPaths = ['/home', '/contact', '/signIn', '/signUp', '/about'];
   const pathname = request.nextUrl.pathname;
