@@ -27,6 +27,7 @@ import { Button } from '@/components/ui/button';
 import { passwordMatchSchema } from '@/validation/passwordMatchSchema';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useAuthStore } from '@/app/zustand/AuthStore';
 
 const userSchema = z
   .object({
@@ -42,6 +43,7 @@ const companySchema = z
   .and(passwordMatchSchema);
 
 export default function SignInPage() {
+  const { setCompany } = useAuthStore();
   const router = useRouter();
   const [signInAsCompany, setSignInAsCompany] = useState(true);
   const [errorMessage, setErrorMessage] = useState(undefined);
@@ -69,15 +71,18 @@ export default function SignInPage() {
 
       const endpoint = signInAsCompany ? '/api/sign-in' : '/api/user-signin';
 
-      const { data, status } = await axios.post(endpoint, requestData, {
+      const data = await axios.post(endpoint, requestData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (status === 200) {
-        form.reset();
+      if (data.data.status === 200 && data.data.role === 'company') {
+        // form.reset();
+
+        // setCompany(true);
+        console.log(data.data.role === 'company');
         router.push('/home');
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -16,6 +16,8 @@ export async function GET(req: Request) {
       }
     );
 
+    console.log(response, 'ssssssssssssssssssssssssss');
+
     return NextResponse.json({
       data: response.data,
       status: response.status,

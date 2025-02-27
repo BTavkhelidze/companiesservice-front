@@ -19,8 +19,8 @@ export async function POST(req: Request) {
     const setCookieHeader = response.headers['set-cookie'];
 
     const nextResponse = NextResponse.json(
-      { status: 200, message: 'success' },
-      { status: 200 }
+      { status: 200, message: 'success', role: 'company' }
+      // { status: 200 }
     );
 
     if (setCookieHeader) {

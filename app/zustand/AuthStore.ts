@@ -1,21 +1,42 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface AuthState {
-  company: { id: string; name: string } | null;
-  user: { id: string; name: string; role: 'user' | 'admin' } | null;
-  isAuthenticated: boolean;
-  setCompany: (company: { id: string; name: string } | null) => void;
-  setUser: (
-    user: { id: string; name: string; role: 'user' | 'admin' } | null
-  ) => void;
+  company: true | null;
+  user: true | null;
+  role: 'company' | 'user' | null;
+  setCompany: (company: true | null) => void;
+  setUser: (user: true | null) => void;
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  company: null,
-  user: null,
-  isAuthenticated: false,
-  setCompany: (company) => set({ company, isAuthenticated: !!company }),
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
-  logout: () => set({ company: null, user: null, isAuthenticated: false }),
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      company: null,
+      user: null,
+      role: null,
+      setCompany: (company) =>
+        set({
+          company,
+          user: null,
+          role: company ? 'company' : null,
+        }),
+      setUser: (user) =>
+        set({
+          user,
+          company: null,
+          role: user ? 'user' : null,
+        }),
+      logout: () =>
+        set({
+          company: null,
+          user: null,
+          role: null,
+        }),
+    }),
+    {
+      name: 'auth-storage', // Key for localStorage
+    }
+  )
+);

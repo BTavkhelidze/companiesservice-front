@@ -20,7 +20,7 @@ export const UseCurrentCompany = create<CompanyState>((set) => ({
       if (data.status === 200) {
         set({ company: data.data, loading: false });
       }
-      console.log(data, 'dataaaaaaaaaaaaa');
+      console.log(data.status, 'dataaaaaaaaaaaaa');
       set({ loading: false, error: data.data });
     } catch (err) {
       console.error(err);
