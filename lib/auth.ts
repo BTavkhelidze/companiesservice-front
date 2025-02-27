@@ -1,15 +1,30 @@
 export async function getSession(request?: Request) {
   const rawCookie = request?.headers.get('cookie') || '';
 
-  const cookie = rawCookie
+  let cookie;
+  let role;
+
+  const companyCookie = rawCookie
     .split(';')
     .find((el) => el.includes('accesstoken'))
     ?.split('=')[1];
-  let role;
-  if (cookie) {
+
+  if (companyCookie) {
     role = 'company';
+    cookie = companyCookie;
   }
-  if (!cookie) return null;
+
+  const userCookie = rawCookie
+    .split(';')
+    .find((el) => el.includes('usertoken'))
+    ?.split('=')[1];
+
+  if (userCookie) {
+    role = 'user';
+    cookie = userCookie;
+  }
+
+  if (!cookie && !userCookie) return null;
 
   try {
     return { cookie: cookie, role: role };

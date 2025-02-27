@@ -9,6 +9,8 @@ import AddNewUser from '@/components/AddNewUser';
 import { Users } from '@/components/Users';
 import { fetchCurrentCompany } from '@/service/api';
 import Logout from '@/components/Logout';
+import FileUpload from '@/components/UploadFile';
+import axios from 'axios';
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
   throw new Error('NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined');
@@ -28,6 +30,7 @@ export interface ICompany {
 function HomePage() {
   const [companystate, setCompanystate] = useState<ICompany | undefined>();
   const [loading, setLoading] = useState(true);
+  const [allFiles, setAllFiles] = useState(null);
 
   useEffect(() => {
     const getCompanyData = async () => {
@@ -46,7 +49,22 @@ function HomePage() {
     getCompanyData();
   }, []);
 
-  console.log(companystate, 'sssssssssss');
+  useEffect(() => {
+    const getFiles = async () => {
+      try {
+        const response = await axios.get('/api/readAllFiles', {
+          withCredentials: true,
+        });
+        setAllFiles(response.data);
+        console.log(response, 'res');
+      } catch (error) {
+        console.error('Error fetching files:', error);
+      }
+    };
+    getFiles();
+  }, []);
+
+  console.log(allFiles, 'ss');
 
   if (loading) {
     return <div>Loading...</div>;
@@ -61,9 +79,20 @@ function HomePage() {
   return (
     <div>
       <h1>CompanyName : {companystate.name}</h1>
+      <div className=' w-full grid grid-cols-2  gap-3 300 h-[800px] flex-wrap'>
+        <div className=' bg-red-300 h-[300px] w-[300px] justify-self-end self-end grid justify-center items-center'>
+          {' '}
+          View Users Dashboard
+        </div>
+        <div className=' bg-green-300 h-[300px] w-[300px] justify-self-start self-end'></div>
+        <div className=' bg-blue-400 h-[300px] col-span-2 justify-self-center w-[300px] '></div>
+      </div>
       <Logout />
+      <FileUpload />
       <Users />
       <AddNewUser />
+      {allFiles &&
+        allFiles.map((file, i) => <div key={i}> {file.fileUrl}</div>)}
       <Subscriptions company={companystate} />
     </div>
   );

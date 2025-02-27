@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const response = await axios.post(
-      'http://localhost:3000/auth/company-signIn',
+      'http://localhost:3000/auth/signIn-user',
       body,
       {
         withCredentials: true,
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const setCookieHeader = response.headers['set-cookie'];
 
     const nextResponse = NextResponse.json(
-      { status: 200, response: response.data.message, role: 'company' }
+      { status: 200, message: 'success', role: 'user' }
       // { status: 200 }
     );
 
@@ -32,7 +32,6 @@ export async function POST(req: Request) {
         nextResponse.headers.append('Set-Cookie', cookie);
       });
     }
-
     return nextResponse;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

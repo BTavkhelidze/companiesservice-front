@@ -43,7 +43,6 @@ const companySchema = z
   .and(passwordMatchSchema);
 
 export default function SignInPage() {
-  const { setCompany } = useAuthStore();
   const router = useRouter();
   const [signInAsCompany, setSignInAsCompany] = useState(true);
   const [errorMessage, setErrorMessage] = useState(undefined);
@@ -69,7 +68,7 @@ export default function SignInPage() {
         ...(signInAsCompany && { name: formData.companyName }),
       };
 
-      const endpoint = signInAsCompany ? '/api/sign-in' : '/api/user-signin';
+      const endpoint = signInAsCompany ? '/api/sign-in' : '/api/sign-inUser';
 
       const data = await axios.post(endpoint, requestData, {
         withCredentials: true,
@@ -79,11 +78,15 @@ export default function SignInPage() {
       });
 
       if (data.data.status === 200 && data.data.role === 'company') {
+        console.log(data, 'data.data.role ');
+        console.log('here', data.data.role === 'company');
         // form.reset();
-
-        // setCompany(true);
-        console.log(data.data.role === 'company');
         router.push('/home');
+      }
+      if (data.data.status === 200 && data.data.role === 'user') {
+        form.reset();
+        console.log('here', data.data.role === 'user');
+        router.push('/dashboard/home');
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

@@ -7,3 +7,11 @@ export const fetchCurrentCompany = async () => {
 
   return response.data;
 };
+
+export const fetchCurrentUser = async () => {
+  const response = await axios.get('/api/current-user', {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
