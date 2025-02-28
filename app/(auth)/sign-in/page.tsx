@@ -29,32 +29,23 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuthStore } from '@/app/zustand/AuthStore';
 
-const userSchema = z
-  .object({
-    email: z.string().email(),
-  })
-  .and(passwordMatchSchema);
-
-const companySchema = z
-  .object({
-    email: z.string().email(),
-    companyName: z.string().min(2, 'Company name is required'),
-  })
-  .and(passwordMatchSchema);
+const signInSchema = z.object({
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(4, 'pasword must contain al least 5 character')
+    .max(20, 'pasword must contain  maximum 20 character'),
+});
 
 export default function SignInPage() {
   const router = useRouter();
   const [signInAsCompany, setSignInAsCompany] = useState(true);
   const [errorMessage, setErrorMessage] = useState(undefined);
 
-  const formSchema = signInAsCompany ? companySchema : userSchema;
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
     defaultValues: async () => {
-      return signInAsCompany
-        ? { email: '', password: '', passwordConfirm: '', companyName: '' }
-        : { email: '', password: '', passwordConfirm: '' };
+      return { email: '', password: '', passwordConfirm: '' };
     },
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -65,7 +56,6 @@ export default function SignInPage() {
       const requestData = {
         email: formData.email,
         password: formData.password,
-        ...(signInAsCompany && { name: formData.companyName }),
       };
 
       const endpoint = signInAsCompany ? '/api/sign-in' : '/api/sign-inUser';
@@ -124,22 +114,6 @@ export default function SignInPage() {
               className='gap-5 flex flex-col'
               onChange={() => setErrorMessage(undefined)}
             >
-              {signInAsCompany && (
-                <FormField
-                  control={form.control}
-                  name='companyName'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder='Company Name' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-
               <FormField
                 control={form.control}
                 name='email'
@@ -172,23 +146,6 @@ export default function SignInPage() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name='passwordConfirm'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Confirm Password'
-                        type='password'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <div className='h-6'>
                 {errorMessage && <p className='text-red-400'>{errorMessage}</p>}
               </div>

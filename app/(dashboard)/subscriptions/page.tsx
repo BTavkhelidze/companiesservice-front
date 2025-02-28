@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
 import { ICompany } from '../home/page';
+import { fetchCurrentCompany } from '@/service/api';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -19,12 +20,25 @@ interface Plan {
   images: string | null;
 }
 
-interface company {
-  company: ICompany;
-}
-
-const Subscription: React.FC<company> = ({ company }) => {
+const Subscription = () => {
   const [plans, setPlans] = useState([]);
+
+  const [companystate, setCompanystate] = useState<ICompany | undefined>();
+  useEffect(() => {
+    const getCompanyData = async () => {
+      try {
+        const data = await fetchCurrentCompany();
+        if (data.status === 200) {
+          setCompanystate(data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch company data:', error);
+      } finally {
+      }
+    };
+
+    getCompanyData();
+  }, []);
 
   useEffect(() => {
     fetch('/api/subscription-plans')
@@ -55,6 +69,7 @@ const Subscription: React.FC<company> = ({ company }) => {
           }),
         });
         const data = await response.json();
+
         return data.sessionId;
       };
 
@@ -69,11 +84,13 @@ const Subscription: React.FC<company> = ({ company }) => {
     }
   };
 
+  if (!companystate) return null;
+
   return (
     <div className='mx-auto px-4 py-8 bg-background text-textColor'>
       <div className='text-center mb-12'>
         <h1 className='text-5xl font-bold text-gray-900 dark:text-white'>
-          current plan: {company.plan}
+          current plan: {companystate.plan}
         </h1>
         <p className='text-gray-500 dark:text-gray-300 mt-3 text-lg'>
           Choose a plan that fits your needs and start using our product today.

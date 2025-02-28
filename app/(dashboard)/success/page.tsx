@@ -109,13 +109,14 @@ export default function SuccessPage() {
 
   if (status === 'unknown') {
     return (
-      <div className='flex items-center justify-center h-screen bg-yellow-100'>
-        <div className='p-6 bg-white rounded shadow-md'>
-          <h1 className='text-2xl font-bold text-yellow-600'>
-            Unknown Subscription Status
+      <div className='flex items-center justify-center h-screen border-red-500'>
+        <div className='text-center space-y-4'>
+          <div className='text-red-500 text-5xl'>✕</div>
+          <h1 className='text-2xl font-semibold text-gray-900'>
+            Payment Failed
           </h1>
-          <p className='mt-4 text-gray-600'>
-            Unable to retrieve subscription status. Please contact support.
+          <p className='text-gray-600'>
+            We couldn't process your subscription. Please try again.
           </p>
         </div>
       </div>
@@ -125,26 +126,44 @@ export default function SuccessPage() {
   return (
     <div className='flex px-6 items-center justify-center h-screen bg-green-100'>
       <div className='flex  items-center justify-center  bg-green-400 '>
-        <div className='p-6 flex flex-col bg-white items-center rounded shadow-md text-center'>
-          <h1 className='text-3xl font-bold text-green-600'>
-            Payment Successful!
-          </h1>
+        <div className='p-6 flex gap-7 flex-col bg-white items-center rounded shadow-md text-center'>
+          <div className='animate-check'>
+            <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto'>
+              <svg
+                className='w-8 h-8 text-green-500'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M5 13l4 4L19 7'
+                />
+              </svg>
+            </div>
+          </div>
 
-          <p className='mt-4 text-gray-700'>
-            The payment was processed succesfully
-            <br /> your subscription plan
-            <span className='font-semibold text-blue-600 hover:underline ml-1'>
-              {planName}
-            </span>{' '}
-            has been confirmed.
-          </p>
+          <div className='space-y-2'>
+            <h1 className='text-2xl font-semibold text-gray-900'>
+              Payment Successful
+            </h1>
+            <p className='text-gray-600'>
+              Your <span className='font-medium text-blue-600'>{planName}</span>{' '}
+              plan is now active
+            </p>
+          </div>
           <button
             type='button'
-            className=' mt-4 bg-cyan-500 text-white  px-4 py-3 rounded-lg  font-medium hover:bg-blue-700 transition-colors'
+            className='w-full py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors'
             onClick={() => PushRoute()}
           >
             Go Back
           </button>
+          <p className='text-sm text-gray-500'>
+            Redirecting automatically in 5 seconds...
+          </p>
         </div>
       </div>
     </div>

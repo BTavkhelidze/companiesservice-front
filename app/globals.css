@@ -15,3 +15,7 @@
   --page-width-max: 600px;
   --transition-duration: 2s;
 }
+
+body {
+  background-color: var(--body-color);
+}

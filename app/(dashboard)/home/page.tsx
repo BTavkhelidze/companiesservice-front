@@ -9,8 +9,9 @@ import AddNewUser from '@/components/AddNewUser';
 import { Users } from '@/components/Users';
 import { fetchCurrentCompany } from '@/service/api';
 import Logout from '@/components/Logout';
-import FileUpload from '@/components/UploadFile';
+
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
   throw new Error('NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined');
@@ -24,6 +25,8 @@ export interface ICompany {
   plan: string;
   stripeCustomerId: string;
   subscriptionId: string;
+  users: [];
+  filesUrl: [];
   __v: number;
   _id: string;
 }
@@ -31,6 +34,8 @@ function HomePage() {
   const [companystate, setCompanystate] = useState<ICompany | undefined>();
   const [loading, setLoading] = useState(true);
   const [allFiles, setAllFiles] = useState(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const getCompanyData = async () => {
@@ -67,33 +72,46 @@ function HomePage() {
   console.log(allFiles, 'ss');
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='w-full mx-auto flex h-screen items-center justify-center'>
+        Loading...
+      </div>
+    );
   }
-
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
 
   if (!companystate) return null;
 
   return (
-    <div>
-      <h1>CompanyName : {companystate.name}</h1>
-      <div className=' w-full grid grid-cols-2  gap-3 300 h-[800px] flex-wrap'>
-        <div className=' bg-red-300 h-[300px] w-[300px] justify-self-end self-end grid justify-center items-center'>
-          {' '}
-          View Users Dashboard
+    <div className='px-3 md:px-[50px] pt-10 flex flex-col  h-screen'>
+      <div className='w-full gap-14 flex'>
+        <h1>CompanyName : {companystate.name}</h1>
+        <div className='cursor-pointer'>
+          <Logout />
         </div>
-        <div className=' bg-green-300 h-[300px] w-[300px] justify-self-start self-end'></div>
-        <div className=' bg-blue-400 h-[300px] col-span-2 justify-self-center w-[300px] '></div>
       </div>
-      <Logout />
-      <FileUpload />
-      <Users />
-      <AddNewUser />
-      {allFiles &&
-        allFiles.map((file, i) => <div key={i}> {file.fileUrl}</div>)}
-      <Subscriptions company={companystate} />
+      <div className=' w-full  mx-auto flex h-full  gap-5 300  flex-1    items-center justify-center'>
+        <div
+          className='p-6 h-[300px] w-[300px] bg-white justify-self-end rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer flex flex-col justify-center items-center border border-gray-100'
+          onClick={() => router.push('/users')}
+        >
+          {' '}
+          <p className='groupe-[hover:scale-1 ]'>View Users Dashboard</p>
+        </div>
+        <div
+          className='p-6 h-[300px] w-[300px] bg-white  rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer  flex flex-col justify-center items-center border border-gray-100'
+          onClick={() => router.push('/files')}
+        >
+          {' '}
+          <p className='groupe-[hover:scale-1 ]'>View Files Dashboard</p>
+        </div>
+        <div
+          className='p-6 h-[300px] w-[300px] bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer flex flex-col justify-center items-center border border-gray-100'
+          onClick={() => router.push('/subscptionDashboard')}
+        >
+          {' '}
+          <p className='groupe-[hover:scale-1 ]'>View Subscription Dashboard</p>
+        </div>
+      </div>
     </div>
   );
 }

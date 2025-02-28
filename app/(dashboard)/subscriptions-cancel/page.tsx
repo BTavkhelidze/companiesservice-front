@@ -13,33 +13,20 @@ export default function OrderSuccess() {
     router.push('/home');
   };
 
-  useEffect(() => {
-    // toast.error("Payment canselled !", {
-    //   position: "bottom-right",
-    // });
-    // setTimeout(() => {
-    //   PushRoute();
-    // }, 5000);
-  }, []);
+  setTimeout(() => {
+    PushRoute();
+  }, 5000);
 
   return (
     <div className=' h-screen  px-6 flex items-center justify-center bg-green-100'>
-      <div className='flex items-center justify-center bg-green-400'>
-        <div className='p-6 flex flex-col bg-white   rounded shadow-md '>
-          <h1 className='text-3xl font-bold text-red-600'>Payment canceled</h1>
-          <p className='mt-4 text-gray-700'>
-            Your payment for {planName} has been canceled.
-            <br />
-          </p>
+      <div className='text-center space-y-4'>
+        <div className='text-red-500 text-5xl'>✕</div>
+        <h1 className='text-2xl font-semibold text-gray-900'>Payment Failed</h1>
+        <p className='text-gray-600'>
+          We couldn't process your subscription. Please try again.
+        </p>
 
-          <button
-            type='button'
-            className=' mt-4 bg-red-400 text-white  px-4 py-3 rounded-lg  font-medium hover:bg-blue-700 transition-colors'
-            onClick={() => PushRoute()}
-          >
-            Return to pricing
-          </button>
-        </div>
+        <button onClick={() => PushRoute()}> Go Back</button>
       </div>
     </div>
   );

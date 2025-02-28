@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import axios from 'axios';
 import { useUsers } from '@/app/zustand/users';
+import { UseCurrentCompany } from '@/app/zustand/useCompanyActive';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -29,6 +30,8 @@ function AddNewUser() {
   const { addUser, fetchUsers } = useUsers();
   const { error } = useUsers();
   const [open, setOpen] = useState(false);
+
+  const { company } = UseCurrentCompany();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,6 +50,8 @@ function AddNewUser() {
     };
 
     try {
+      if (company && company.users.length >= 1 && company.plan === 'free') {
+      }
       addUser(newUser);
 
       if (!error) setOpen(false);

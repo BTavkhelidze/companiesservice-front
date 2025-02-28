@@ -6,7 +6,18 @@ import { getSession } from '@/lib/auth';
 // Define public routes
 const PUBLIC_ROUTES = ['/sign-in', '/sign-up'];
 
-const COMPANY_ROUTES = ['/home', '/about'];
+const COMPANY_ROUTES = [
+  '/home',
+  '/about',
+  '/users',
+  '/files',
+  '/subscptionDashboard',
+  '/cancel',
+  '/payment-success',
+  '/subscriptions',
+  '/subscriptions-cancel',
+  '/success',
+];
 const USER_ROUTES = ['/dashboard/home'];
 
 export async function middleware(request: NextRequest) {
