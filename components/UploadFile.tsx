@@ -34,7 +34,7 @@ export default function FileUpload() {
 
       if (response.ok) {
         const data = await response.json();
-        alert('File uploaded successfully!');
+
         console.log(data);
       } else {
         setError('File upload failed.');
