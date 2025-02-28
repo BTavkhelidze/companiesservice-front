@@ -38,7 +38,8 @@ export default function CheckoutForm({
 
           const { client_secret } = await createCheckoutSession(formData);
           setClientSecret(client_secret);
-        } catch (err) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
           setError(err.message);
         } finally {
           setLoading(false);

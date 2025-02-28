@@ -1,12 +1,10 @@
 'use client';
 
 import React from 'react';
-import { useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+
+import { useRouter } from 'next/navigation';
 
 export default function OrderSuccess() {
-  const searchParams = useSearchParams();
-  const planName = searchParams.get('plan_name');
   const router = useRouter();
 
   const PushRoute = () => {
