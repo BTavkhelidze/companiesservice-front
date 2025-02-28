@@ -9,7 +9,7 @@ export async function createCheckoutSession(data: FormData) {
   const uiMode = data.get('uiMode') as 'hosted' | 'embedded';
   const companyId = data.get('companyId') as string;
   const plan = (data.get('plan') as 'free' | 'basic' | 'premium') || 'free'; // Default to free
-  const origin = headers().get('origin') as string;
+  const origin = (await headers()).get('origin') as string;
 
   const priceIds = {
     free: 'price_1QvwXRLBnqqETekESqovHYqo',

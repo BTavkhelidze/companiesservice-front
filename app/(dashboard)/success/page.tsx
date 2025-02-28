@@ -1,16 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 
-export default function SuccessPage() {
+function SuccessComponent() {
   const [status, setStatus] = useState('loading');
   const [, setCustomerEmail] = useState('');
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
-
   const planName = searchParams.get('plan_name');
 
   const router = useRouter();
@@ -61,15 +59,13 @@ export default function SuccessPage() {
             subscriptionId: session.subscription,
             plan: payment,
           };
-          const update = async () => {
-            await axios.post('/api/company', data, {
-              withCredentials: true,
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-          };
-          update();
+          await axios.post('/api/company', data, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
           setTimeout(() => {
             PushRoute();
           }, 5000);
@@ -86,9 +82,7 @@ export default function SuccessPage() {
   if (status === 'loading') {
     return (
       <div className='flex items-center justify-center h-screen bg-gray-100'>
-        <div className='text-lg font-semibold text-gray-700'>
-          {/* <LoadingSpinner /> */}
-        </div>
+        <div className='text-lg font-semibold text-gray-700'>Loading...</div>
       </div>
     );
   }
@@ -108,25 +102,9 @@ export default function SuccessPage() {
     );
   }
 
-  if (status === 'unknown') {
-    return (
-      <div className='flex items-center justify-center h-screen border-red-500'>
-        <div className='text-center space-y-4'>
-          <div className='text-red-500 text-5xl'>✕</div>
-          <h1 className='text-2xl font-semibold text-gray-900'>
-            Payment Failed
-          </h1>
-          <p className='text-gray-600'>
-            We couldn't process your subscription. Please try again.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className='flex px-6 items-center justify-center h-screen bg-green-100'>
-      <div className='flex  items-center justify-center  bg-green-400 '>
+      <div className='flex items-center justify-center bg-green-400 '>
         <div className='p-6 flex gap-7 flex-col bg-white items-center rounded shadow-md text-center'>
           <div className='animate-check'>
             <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto'>
@@ -168,5 +146,13 @@ export default function SuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div>Loading page...</div>}>
+      <SuccessComponent />
+    </Suspense>
   );
 }
