@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -11,9 +11,11 @@ export default function OrderSuccess() {
     router.push('/home');
   };
 
-  setTimeout(() => {
-    PushRoute();
-  }, 5000);
+  useEffect(() => {
+    setTimeout(() => {
+      PushRoute();
+    }, 5000);
+  }, []);
 
   return (
     <div className=' h-screen  px-6 flex items-center justify-center bg-green-100'>

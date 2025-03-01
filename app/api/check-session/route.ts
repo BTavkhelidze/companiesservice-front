@@ -15,9 +15,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ session });
   } catch (error) {
-    if (error instanceof Error) {
-      console.error('Error in POST /api/check-session:', error.message);
-      return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error) {
+      console.error('Error in POST /api/check-session:');
+      return NextResponse.json(
+        { error: 'somthing went wrong' },
+        { status: 400 }
+      );
     }
 
     console.error('Unknown error occurred:', error);
