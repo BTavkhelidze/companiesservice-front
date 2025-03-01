@@ -3,11 +3,16 @@ import { stripe } from '../../../lib/stripe';
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Request received. Method:', request.method);
+
     const body = await request.text();
+    console.log('Raw request body:', body);
 
     const { sessionId } = JSON.parse(body);
+    console.log('Session ID received:', sessionId);
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+    console.log('Session retrieved from Stripe:', session);
 
     if (session.payment_status === 'paid') {
       console.log("Payment status is 'paid'.");
@@ -15,12 +20,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ session });
   } catch (error) {
-    if (error) {
-      console.error('Error in POST /api/check-session:');
-      return NextResponse.json(
-        { error: 'somthing went wrong' },
-        { status: 400 }
-      );
+    if (error instanceof Error) {
+      console.error('Error in POST /api/check-session:', error.message);
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     console.error('Unknown error occurred:', error);
