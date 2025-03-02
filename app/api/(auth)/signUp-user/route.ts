@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const response = await axios.post(
-      'http://localhost:3000/auth/signUp-users',
+      `${process.env.NEST_PUBLIC_URL}/auth/signUp-users`,
       body,
       {
         withCredentials: true,

@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const response = await axios.post(
-      'http://localhost:3000/auth/signIn-user',
+      `${process.env.NEST_PUBLIC_URL}/auth/signIn-user`,
       body,
       {
         withCredentials: true,
@@ -17,6 +17,8 @@ export async function POST(req: Request) {
     );
 
     const setCookieHeader = response.headers['set-cookie'];
+
+    console.log(response);
 
     const nextResponse = NextResponse.json(
       { status: 200, message: 'success', role: 'user' }

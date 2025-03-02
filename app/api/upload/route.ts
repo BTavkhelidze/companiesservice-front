@@ -7,8 +7,8 @@ export async function POST(req: Request) {
 
   const url =
     session?.role === 'company'
-      ? 'http://localhost:3000/companies'
-      : 'http://localhost:3000/users';
+      ? `${process.env.NEST_PUBLIC_URL}/companies`
+      : `${process.env.NEST_PUBLIC_URL}/users`;
   try {
     const formData = await req.formData();
     const cookieHeader = req.headers.get('cookie') || '';
