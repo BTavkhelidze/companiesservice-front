@@ -5,6 +5,14 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://companiesservice-front.vercel.app//api/:path*',
+      },
+    ];
+  },
   async redirects() {
     return [
       {
