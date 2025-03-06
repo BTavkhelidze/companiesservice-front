@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const response = await axios.post(
-      `${process.env.NEST_PUBLIC_URL}/auth/signUp-users`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/signUp-users`,
       body,
       {
         withCredentials: true,
@@ -20,6 +20,7 @@ export async function POST(req: Request) {
     );
     console.log(response.data, 'resf');
     return NextResponse.json({ status: 201, message: response.data });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.log(err.response);
     return NextResponse.json({

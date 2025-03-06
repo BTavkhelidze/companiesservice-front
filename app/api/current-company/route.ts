@@ -6,7 +6,7 @@ export async function GET(req: Request) {
     const cookieHeader = req.headers.get('cookie') || '';
 
     const response = await axios.get(
-      `${process.env.NEST_PUBLIC_URL}/auth/current-company`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/current-company`,
       {
         withCredentials: true,
         headers: {

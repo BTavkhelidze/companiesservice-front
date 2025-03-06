@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const response = await axios.post(
-      `${process.env.NEST_PUBLIC_URL}/auth/signIn-user`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/signIn-user`,
       body,
       {
         withCredentials: true,

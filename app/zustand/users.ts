@@ -10,6 +10,7 @@ interface IUsers {
 interface IZustand {
   users: IUsers[];
   error: string | null;
+  loading: boolean;
   fetchUsers: () => Promise<void>;
   addUser: (newUser: IUsers) => Promise<void>;
 }
@@ -17,9 +18,11 @@ interface IZustand {
 export const useUsers = create<IZustand>((set) => ({
   users: [],
   error: null,
+  loading: false,
   fetchUsers: async () => {
+    set({ loading: true });
     const response = await axios.get('/api/users', { withCredentials: true });
-    set({ users: response.data.data });
+    set({ users: response.data.data, loading: false });
   },
   addUser: async (newUser) => {
     set({ error: null });

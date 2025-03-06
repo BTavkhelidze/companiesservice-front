@@ -3,7 +3,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const response = await fetch(
-      `${process.env.NEST_PUBLIC_URL}/auth/company-signUp`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/company-signUp`,
       {
         method: 'POST',
         headers: {

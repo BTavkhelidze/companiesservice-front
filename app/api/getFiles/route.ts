@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     // console.log(filePath, 'filePath');
     const cookieHeader = req.headers.get('cookie') || '';
     const response = await axios.post(
-      `${process.env.NEST_PUBLIC_URL}/users/getFile`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/getFile`,
       { filePath: filePath },
       {
         withCredentials: true,

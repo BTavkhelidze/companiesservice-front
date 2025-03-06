@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   const cookieHeader = req.headers.get('cookie') || '';
 
   const res = await axios.post(
-    `${process.env.NEST_PUBLIC_URL}/companies/updatePlan`,
+    `${process.env.NEXT_PUBLIC_API_URL}/companies/updatePlan`,
     data,
     {
       withCredentials: true,

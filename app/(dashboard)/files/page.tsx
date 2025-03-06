@@ -1,6 +1,6 @@
 'use client';
 import FileUpload from '@/components/UploadFile';
-
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -65,7 +65,12 @@ function FilePage() {
           {allFiles &&
             allFiles.map((file, i) => {
               return (
-                <div key={i} className='bg-slate-300 mb-6 flex justify-between'>
+                <motion.div
+                  whileHover={{ originX: 0, scale: 1.1 }}
+                  key={i}
+                  transition={{ type: 'spring', stiffness: 120 }}
+                  className='bg-slate-300 max-w-[600px] cursor-pointer  mb-6 flex justify-between'
+                >
                   {' '}
                   <p>{file.fileUrl}</p>
                   {filePath && (
@@ -79,7 +84,7 @@ function FilePage() {
                       </a>
                     </div>
                   )}
-                </div>
+                </motion.div>
               );
             })}
         </div>

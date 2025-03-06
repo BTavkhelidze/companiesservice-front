@@ -68,12 +68,12 @@ export default function SignInPage() {
       if (data.data.status === 200 && data.data.role === 'company') {
         console.log(data, 'data.data.role ');
         console.log('here', data.data.role === 'company');
-        // form.reset();
+        form.reset();
         router.push('/home');
       }
       if (data.data.status === 200 && data.data.role === 'user') {
         form.reset();
-        console.log('here', data.data.role === 'user');
+
         router.push('/dashboard/home');
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

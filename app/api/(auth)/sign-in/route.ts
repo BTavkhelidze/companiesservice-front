@@ -2,12 +2,11 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 export async function POST(req: Request) {
-  console.log(process.env.NEST_PUBLIC_URL, 'urllllll');
   try {
     const body = await req.json();
 
     const response = await axios.post(
-      `${process.env.NEST_PUBLIC_URL}/auth/company-signIn`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/company-signIn`,
       body,
       {
         withCredentials: true,
@@ -20,7 +19,7 @@ export async function POST(req: Request) {
     const setCookieHeader = response.headers['set-cookie'];
 
     const nextResponse = NextResponse.json(
-      { status: response.data }
+      { status: 200, message: 'success', role: 'company' }
       // { status: 200 }
     );
 
