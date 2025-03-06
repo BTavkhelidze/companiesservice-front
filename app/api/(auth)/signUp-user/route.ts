@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         },
       }
     );
-    console.log(response.data, 'resf');
+    console.log(response.data, 'res f');
     return NextResponse.json({ status: 201, message: response.data });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
