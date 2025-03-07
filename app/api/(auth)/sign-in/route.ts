@@ -4,6 +4,7 @@ import axios from 'axios';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    console.log(process.env.NEXT_PUBLIC_API_URL);
 
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/company-signIn`,

@@ -1,22 +1,23 @@
 'use client';
 import { useUsers } from '@/app/zustand/users';
-import { animate, motion } from 'framer-motion';
-import axios from 'axios';
-import { headers } from 'next/headers';
-import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
+
+import React, { useEffect, useState } from 'react';
+import Modal from './Modal';
 
 export const Users = () => {
   const { loading, users, fetchUsers } = useUsers();
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
 
-  const removeUser = async (email: string) => {
-    // console.log(email, ';emaill');
-    const response = await axios.delete('/api/deleteUser', { data: email });
-    console.log(response);
-  };
+  // const removeUser = async (email: string) => {
+  //   // console.log(email, ';emaill');
+  //   const response = await axios.delete('/api/deleteUser', { data: email });
+  //   console.log(response);
+  // };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -40,6 +41,8 @@ export const Users = () => {
       animate='visible'
       className='space-y-4 p-4'
     >
+      <Modal showModal={showModal} setShowModal={setShowModal} />
+
       <motion.h2
         variants={userHVariants}
         transition={{ duration: 0.5 }}
@@ -69,7 +72,7 @@ export const Users = () => {
 
               <button
                 className='mt-2 text-sm text-red-500 hover:text-red-700 transition-colors'
-                onClick={() => removeUser(user.email)}
+                onClick={() => setShowModal(true)}
               >
                 Delete
               </button>
