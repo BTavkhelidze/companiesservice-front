@@ -1,8 +1,7 @@
 'use client';
 import { useUsers } from '@/app/zustand/users';
-import { animate, motion } from 'framer-motion';
-import axios from 'axios';
-import { headers } from 'next/headers';
+import { motion } from 'framer-motion';
+
 import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
 
@@ -14,11 +13,11 @@ export const Users = () => {
     fetchUsers();
   }, [fetchUsers]);
 
-  const removeUser = async (email: string) => {
-    // console.log(email, ';emaill');
-    const response = await axios.delete('/api/deleteUser', { data: email });
-    console.log(response);
-  };
+  // const removeUser = async (email: string) => {
+  //   // console.log(email, ';emaill');
+  //   const response = await axios.delete('/api/deleteUser', { data: email });
+  //   console.log(response);
+  // };
 
   const containerVariants = {
     hidden: { opacity: 0 },

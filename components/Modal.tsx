@@ -26,11 +26,16 @@ const modal = {
   },
 };
 
-const Modal = ({ showModal, setShowModal }) => {
+interface IModal {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showModal: boolean;
+}
+
+const Modal: React.FC<IModal> = ({ showModal, setShowModal }) => {
   const [showText, setShowText] = useState(false);
 
   useEffect(() => {
-    let timer;
+    let timer: NodeJS.Timeout | undefined;
     if (showText) {
       timer = setTimeout(() => {
         setShowModal(false);
